@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Garage69 - Alpha 3.8.2</title>
+    <title>Garage69 - Alpha 3.9.0</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,7 +70,7 @@
         };
 
         function App() {
-            const version = "Alpha 3.8.2";
+            const version = "Alpha 3.9.0";
             const [activeView, setActiveView] = useState('home');
             const [isLoading, setIsLoading] = useState(true);
             const [isAdmin, setIsAdmin] = useState(false);
@@ -81,6 +81,7 @@
             const [sessions, setSessions] = useState([]);
             const [messages, setMessages] = useState([]);
             const [beerStock, setBeerStock] = useState([]);
+            const [news, setNews] = useState([]);
 
             useEffect(() => {
                 const unsubPlayers = db.collection('members').orderBy('name', 'asc').onSnapshot(snap => {
@@ -97,8 +98,9 @@
                 const unsubBeer = db.collection('beer').onSnapshot(snap => setBeerStock(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
                 const unsubSessions = db.collection('sessions').orderBy('date', 'asc').onSnapshot(snap => setSessions(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
                 const unsubChat = db.collection('chat').orderBy('timestamp', 'asc').limit(50).onSnapshot(snap => setMessages(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+                const unsubNews = db.collection('news').orderBy('date', 'desc').limit(5).onSnapshot(snap => setNews(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
 
-                return () => { unsubPlayers(); unsubBeer(); unsubSessions(); unsubChat(); };
+                return () => { unsubPlayers(); unsubBeer(); unsubSessions(); unsubChat(); unsubNews(); };
             }, []);
 
             const vibrate = () => { if (window.navigator.vibrate) window.navigator.vibrate(20); };
@@ -107,9 +109,9 @@
             const Dashboard = () => {
                 const selectIdentity = async (name, id) => { vibrate(); setCurrentUser(name); localStorage.setItem('g69_user', name); await db.collection('members').doc(id).update({ isBound: true }); };
                 return (
-                    <div className="space-y-6 animate-fadeIn text-center max-w-xl mx-auto">
-                        <div className="flex flex-col items-center py-6">
-                            <div className="w-64 h-64 md:w-80 md:h-80 mb-2"><img src={LOGO_URL} className="w-full h-full object-contain drop-shadow-2xl" alt="Garage69" /></div>
+                    <div className="space-y-6 animate-fadeIn text-center max-w-xl mx-auto flex flex-col items-center">
+                        <div className="flex flex-col items-center py-6 w-full">
+                            <div className="w-72 h-72 md:w-96 md:h-96 mb-2"><img src={LOGO_URL} className="w-full h-full object-contain drop-shadow-2xl" alt="Garage69" /></div>
                             <div className="mt-2 p-5 darts-card rounded-2xl w-full max-w-[300px] border-l-0 border-t-4 border-t-[#C23B22]">
                                 {!currentUser ? (
                                     <div className="animate-fadeIn">
@@ -127,6 +129,26 @@
                                 )}
                             </div>
                         </div>
+
+                        {/* News Sektion */}
+                        <div className="mt-4 w-full max-w-md text-left px-2">
+                            <h3 className="text-xs font-black uppercase text-[#C23B22] mb-3 tracking-widest flex items-center gap-2">
+                                <span className="w-2 h-2 bg-[#C23B22] rounded-full animate-pulse"></span>
+                                News vom Board
+                            </h3>
+                            <div className="space-y-3">
+                                {news.length === 0 ? (
+                                    <p className="text-slate-400 italic text-sm text-center py-4">Noch keine Neuigkeiten...</p>
+                                ) : (
+                                    news.map(n => (
+                                        <div key={n.id} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-[#1F293A] animate-fadeIn">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">{new Date(n.date).toLocaleDateString('de-DE')}</p>
+                                            <p className="font-bold text-slate-800 text-sm leading-relaxed">{n.content}</p>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
                     </div>
                 );
             };
@@ -134,6 +156,8 @@
             const AdminView = () => {
                 const [newPlayerName, setNewPlayerName] = useState("");
                 const [newS, setNewS] = useState({ id: null, title: '', date: '', time: '' });
+                const [newsText, setNewsText] = useState("");
+                const [newsDate, setNewsDate] = useState(new Date().toISOString().split('T')[0]);
                 const [activeIdx, setActiveIdx] = useState(0);
 
                 const handleScroll = (e) => { const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth); setActiveIdx(idx); };
@@ -142,6 +166,15 @@
                 const deletePlayer = async (id) => { if(confirm("Löschen?")) { vibrate(); await db.collection('members').doc(id).delete(); } };
                 const deleteSession = async (id) => { if(confirm("Termin permanent entfernen?")) { vibrate(); await db.collection('sessions').doc(id).delete(); if(newS.id === id) setNewS({id:null, title:'', date:'', time:''}); } };
                 
+                const addNews = async () => {
+                    if(!newsText.trim()) return;
+                    await db.collection('news').add({ content: newsText.trim(), date: newsDate });
+                    setNewsText("");
+                    alert("News gepostet!");
+                };
+
+                const deleteNews = async (id) => { if(confirm("News löschen?")) await db.collection('news').doc(id).delete(); };
+
                 const saveSession = async () => { 
                     if(!newS.title) return;
                     if(newS.id) {
@@ -164,47 +197,59 @@
                         </div>
 
                         <div onScroll={handleScroll} className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-4 px-1">
+                            {/* Termin-Verwaltung */}
                             <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
-                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px] flex flex-col relative border-amber-400 border border-4 border-amber-100">
-                                    <p className="text-[#C23B22] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">Terminverwaltung</p>
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px] flex flex-col relative border-amber-400 border border-4 border-amber-100">
+                                    <p className="text-[#C23B22] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">Termine</p>
                                     <div className="space-y-3 mb-6 border-b border-slate-100 pb-4 bg-slate-50/50 p-3 rounded-2xl relative">
                                         {newS.id && <span className="absolute top-2 right-2 text-[10px] bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-black uppercase">Edit</span>}
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{newS.id ? '📍 Bearbeitung' : '✨ Neuer Termin'}</p>
                                         <input value={newS.title} onChange={e => setNewS({...newS, title: e.target.value})} placeholder="Event Name" className="w-full p-3 border rounded-lg text-base bg-white outline-none font-bold"/>
                                         <div className="flex gap-2">
                                             <input type="date" value={newS.date} onChange={e => setNewS({...newS, date: e.target.value})} className="flex-1 p-3 border rounded-lg text-sm bg-white outline-none"/>
                                             <input type="time" value={newS.time} onChange={e => setNewS({...newS, time: e.target.value})} className="flex-1 p-3 border rounded-lg text-sm bg-white outline-none"/>
                                         </div>
-                                        <div className="flex gap-2 pt-1">
-                                            <button onClick={saveSession} className={`flex-1 text-white py-3 rounded-lg font-black uppercase text-xs ${newS.id ? 'bg-amber-500 shadow-amber-500/20 shadow-lg' : 'bg-[#C23B22] shadow-red-600/20 shadow-lg'}`}>
-                                                {newS.id ? 'Änderung speichern' : 'Publizieren'}
-                                            </button>
-                                            {newS.id && <button onClick={() => setNewS({id:null, title:'', date:'', time:''})} className="bg-slate-200 px-4 rounded-lg text-xs font-black uppercase text-slate-600">X</button>}
-                                        </div>
+                                        <button onClick={saveSession} className={`w-full text-white py-3 rounded-lg font-black uppercase text-xs ${newS.id ? 'bg-amber-500' : 'bg-[#C23B22]'}`}>
+                                            {newS.id ? 'Speichern' : 'Publizieren'}
+                                        </button>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-48 pt-2">
-                                        <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Wähle zum Bearbeiten:</p>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-48">
                                         {sessions.map(s => (
-                                            <div key={s.id} onClick={() => editSession(s)} className={`flex justify-between items-center p-3 rounded-xl border transition-all cursor-pointer ${newS.id === s.id ? 'border-amber-400 bg-amber-50 shadow-md' : 'bg-white border-slate-100 hover:bg-slate-50'}`}>
-                                                <div className="truncate pr-2 flex items-center gap-2">
-                                                    {newS.id === s.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>}
-                                                    <div>
-                                                        <p className="font-black text-xs truncate uppercase leading-tight">{s.title}</p>
-                                                        <p className="text-[10px] text-slate-400">{s.date} • {s.time}</p>
-                                                    </div>
-                                                </div>
-                                                <button onClick={(e) => { e.stopPropagation(); deleteSession(s.id); }} className="text-red-500 bg-red-100 hover:bg-red-200 p-2 rounded-lg flex items-center justify-center transition-colors">
-                                                    <Icons.Trash />
-                                                </button>
+                                            <div key={s.id} onClick={() => editSession(s)} className="flex justify-between items-center p-3 rounded-xl border bg-white border-slate-100">
+                                                <div className="truncate pr-2"><p className="font-black text-xs uppercase leading-tight">{s.title}</p></div>
+                                                <button onClick={(e) => { e.stopPropagation(); deleteSession(s.id); }} className="text-red-500 p-2"><Icons.Trash /></button>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
+                            {/* News Management */}
                             <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
-                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px]">
-                                    <p className="text-[#C23B22] font-black uppercase italic mb-6 text-center text-xl tracking-tighter">Crew Management</p>
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px] flex flex-col border-[#1F293A] border-4 border border-slate-100">
+                                    <p className="text-[#1F293A] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">News Board</p>
+                                    <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl">
+                                        <textarea value={newsText} onChange={e => setNewsText(e.target.value)} placeholder="Was gibt's Neues?" className="w-full p-3 border rounded-xl text-sm bg-white outline-none h-24 resize-none font-medium"></textarea>
+                                        <input type="date" value={newsDate} onChange={e => setNewsDate(e.target.value)} className="w-full p-3 border rounded-xl text-sm bg-white outline-none"/>
+                                        <button onClick={addNews} className="w-full bg-[#1F293A] text-white py-3 rounded-xl font-black uppercase text-xs">Posten</button>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2">
+                                        {news.map(n => (
+                                            <div key={n.id} className="p-3 bg-white border border-slate-100 rounded-xl flex justify-between items-start">
+                                                <div className="flex-1 pr-2">
+                                                    <p className="text-[9px] font-black text-slate-400">{n.date}</p>
+                                                    <p className="text-xs font-bold leading-tight">{n.content}</p>
+                                                </div>
+                                                <button onClick={() => deleteNews(n.id)} className="text-red-400 p-1"><Icons.Trash /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Crew Management */}
+                            <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px]">
+                                    <p className="text-[#C23B22] font-black uppercase italic mb-6 text-center text-xl tracking-tighter">Crew</p>
                                     <div className="flex gap-2 mb-6">
                                         <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Name" className="flex-1 p-3 rounded-xl text-base border bg-slate-50 outline-none" />
                                         <button onClick={addPlayer} className="bg-[#1F293A] text-white px-5 rounded-xl font-black">+</button>
@@ -212,9 +257,9 @@
                                     <div className="space-y-2 max-h-64 overflow-y-auto no-scrollbar">
                                         {players.map(p => (
                                             <div key={p.id} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                                <div><p className="font-bold text-base">{p.name}</p><span className={`text-[10px] font-black px-2 py-0.5 rounded uppercase ${p.isBound ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>{p.isBound ? '📌 Gebunden' : '🔓 Frei'}</span></div>
+                                                <div><p className="font-bold text-base">{p.name}</p></div>
                                                 <div className="flex gap-2">
-                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[10px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black shadow-sm">RESET</button>}
+                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[10px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black">RESET</button>}
                                                     <button onClick={() => deletePlayer(p.id)} className="text-[10px] bg-white border border-red-100 text-red-500 px-2 py-1 rounded-md font-bold">DEL</button>
                                                 </div>
                                             </div>
