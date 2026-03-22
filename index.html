@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Garage69 - Alpha 3.7.0</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #F8FAFC; color: #0F172A; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .darts-card { background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #C23B22; color: #1F293A; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .loader { border: 3px solid #E2E8F0; border-top: 3px solid #C23B22; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #C23B22; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        nav { background-color: rgba(255, 255, 255, 0.85) !important; backdrop-filter: blur(12px); border-top: 1px solid rgba(226, 232, 240, 0.8); }
+        
+        .msg-tail-right { position: relative; border-top-right-radius: 2px !important; margin-right: 8px; }
+        .msg-tail-right::after { content: ''; position: absolute; top: 0; right: -5px; width: 10px; height: 12px; background: #C23B22; clip-path: polygon(0 0, 0 100%, 100% 0); border-radius: 0 2px 0 0; }
+        .msg-tail-left { position: relative; border-top-left-radius: 2px !important; margin-left: 8px; }
+        .msg-tail-left::after { content: ''; position: absolute; top: 0; left: -5px; width: 10px; height: 12px; background: #FFFFFF; clip-path: polygon(100% 0, 0 0, 100% 100%); border-radius: 2px 0 0 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsUHhlyGQp0rNM9qchGtPeceBQEhRV3pM",
+            authDomain: "garage69-3574a.firebaseapp.com",
+            projectId: "garage69-3574a",
+            storageBucket: "garage69-3574a.firebasestorage.app",
+            messagingSenderId: "13019536433",
+            appId: "1:13019536433:web:e11f310ae679dc3c0f0910"
+        };
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const ADMIN_PIN = "1969";
+        const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/garage69-3574a.firebasestorage.app/o/1774196968981_2-removebg-preview.png?alt=media&token=0bd96410-ca5e-4517-9bc6-de624b30d6df";
+
+        const Icons = {
+            Home: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+            Plan: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+            Talk: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+            Bar: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a.5.5 0 0 1-.5-.5V5c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v2a.5.5 0 0 1-.5.5c-.78 0-1.5-.5-2.5-.5Z"/><path d="M5 8v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/></svg>,
+            Rank: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>,
+            Admin: () => <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+            Bell: ({ active }) => (
+                <svg className={`w-6 h-6 transition-all ${active ? 'text-[#C23B22] fill-[#C23B22]/10' : 'text-slate-300'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+            ),
+            Trash: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>,
+            Send: () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        };
+
+        function App() {
+            const version = "Alpha 3.7.0";
+            const [activeView, setActiveView] = useState('home');
+            const [isLoading, setIsLoading] = useState(true);
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [currentUser, setCurrentUser] = useState(localStorage.getItem('g69_user') || "");
+            const [notifsEnabled, setNotifsEnabled] = useState(false);
+            const [isOnline, setIsOnline] = useState(false);
+            const [players, setPlayers] = useState([]);
+            const [sessions, setSessions] = useState([]);
+            const [messages, setMessages] = useState([]);
+            const [beerStock, setBeerStock] = useState([]);
+
+            useEffect(() => {
+                const unsubPlayers = db.collection('members').orderBy('name', 'asc').onSnapshot(snap => {
+                    const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setPlayers(data);
+                    const savedUser = localStorage.getItem('g69_user');
+                    if (savedUser) {
+                        const me = data.find(p => p.name === savedUser);
+                        if (me && me.isBound === false) { setCurrentUser(""); localStorage.removeItem('g69_user'); }
+                    }
+                    setIsOnline(true); setIsLoading(false);
+                }, err => { setIsOnline(false); setIsLoading(false); });
+
+                const unsubBeer = db.collection('beer').onSnapshot(snap => setBeerStock(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+                const unsubSessions = db.collection('sessions').orderBy('date', 'asc').onSnapshot(snap => setSessions(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+                const unsubChat = db.collection('chat').orderBy('timestamp', 'asc').limit(50).onSnapshot(snap => setMessages(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+
+                return () => { unsubPlayers(); unsubBeer(); unsubSessions(); unsubChat(); };
+            }, []);
+
+            const vibrate = () => { if (window.navigator.vibrate) window.navigator.vibrate(20); };
+            const handleAdminLogin = () => { vibrate(); const pin = prompt("Admin PIN:"); if(pin === ADMIN_PIN) { setIsAdmin(true); setActiveView('admin'); } };
+
+            const Dashboard = () => {
+                const selectIdentity = async (name, id) => { vibrate(); setCurrentUser(name); localStorage.setItem('g69_user', name); await db.collection('members').doc(id).update({ isBound: true }); };
+                return (
+                    <div className="space-y-6 animate-fadeIn text-center">
+                        <div className="flex flex-col items-center py-6">
+                            <div className="w-80 h-80 mb-2"><img src={LOGO_URL} className="w-full h-full object-contain drop-shadow-2xl" alt="Garage69" /></div>
+                            <div className="mt-2 p-5 darts-card rounded-2xl w-full max-w-[300px] border-l-0 border-t-4 border-t-[#C23B22]">
+                                {!currentUser ? (
+                                    <div className="animate-fadeIn">
+                                        <p className="text-[10px] font-black uppercase mb-3 text-slate-400 tracking-widest text-center">Identität wählen</p>
+                                        <select onChange={(e) => { const p = players.find(x => x.name === e.target.value); if(p) selectIdentity(p.name, p.id); }} className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm w-full font-bold outline-none text-center cursor-pointer">
+                                            <option value="">Profil...</option>
+                                            {players.filter(p => !p.isBound).map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
+                                        </select>
+                                    </div>
+                                ) : (
+                                    <div className="py-2 animate-fadeIn">
+                                        <p className="text-[10px] font-black uppercase text-[#C23B22] mb-1 tracking-[0.2em]">Mitglied</p>
+                                        <p className="text-2xl font-black text-[#1F293A] uppercase tracking-tighter">{currentUser}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const AdminView = () => {
+                const [newPlayerName, setNewPlayerName] = useState("");
+                const [newS, setNewS] = useState({ id: null, title: '', date: '', time: '' });
+                const [activeIdx, setActiveIdx] = useState(0);
+
+                const handleScroll = (e) => { const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth); setActiveIdx(idx); };
+                const addPlayer = async () => { if(newPlayerName.trim()) { await db.collection('members').add({ name: newPlayerName.trim(), isBound: false }); setNewPlayerName(""); } };
+                const resetPlayer = async (id) => { vibrate(); await db.collection('members').doc(id).update({ isBound: false }); };
+                const deletePlayer = async (id) => { if(confirm("Löschen?")) { vibrate(); await db.collection('members').doc(id).delete(); } };
+                const deleteSession = async (id) => { if(confirm("Termin permanent entfernen?")) { vibrate(); await db.collection('sessions').doc(id).delete(); if(newS.id === id) setNewS({id:null, title:'', date:'', time:''}); } };
+                
+                const saveSession = async () => { 
+                    if(!newS.title) return;
+                    if(newS.id) {
+                        await db.collection('sessions').doc(newS.id).update({ title: newS.title, date: newS.date, time: newS.time });
+                        alert("Aktualisiert!");
+                    } else {
+                        await db.collection('sessions').add({...newS, responses: {}});
+                        alert("Erstellt!");
+                    }
+                    setNewS({id:null, title:'', date:'', time:''});
+                };
+
+                const editSession = (s) => { vibrate(); setNewS({ id: s.id, title: s.title, date: s.date, time: s.time }); };
+
+                return (
+                    <div className="space-y-6 animate-fadeIn">
+                        <div className="flex justify-between items-center px-2">
+                            <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Admin HQ</h2>
+                            <button onClick={() => { setIsAdmin(false); setActiveView('home'); }} className="text-[10px] bg-slate-200 px-3 py-1 rounded-full font-bold">Logout</button>
+                        </div>
+
+                        <div onScroll={handleScroll} className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-4 px-1">
+                            <div className="snap-center min-w-full">
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px] flex flex-col relative border-amber-400 border border-4 border-amber-100 shadow-xl">
+                                    <p className="text-[#C23B22] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">Terminverwaltung</p>
+                                    <div className="space-y-2 mb-6 border-b border-slate-100 pb-4 bg-slate-50/50 p-3 rounded-2xl relative">
+                                        {newS.id && <span className="absolute top-2 right-2 text-[8px] bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-black uppercase">Modus: Edit</span>}
+                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{newS.id ? '📍 Bearbeitung' : '✨ Neuer Termin'}</p>
+                                        <input value={newS.title} onChange={e => setNewS({...newS, title: e.target.value})} placeholder="Event Name" className="w-full p-2 border rounded-lg text-sm bg-white outline-none font-bold"/>
+                                        <div className="flex gap-2">
+                                            <input type="date" value={newS.date} onChange={e => setNewS({...newS, date: e.target.value})} className="flex-1 p-2 border rounded-lg text-xs bg-white outline-none"/>
+                                            <input type="time" value={newS.time} onChange={e => setNewS({...newS, time: e.target.value})} className="flex-1 p-2 border rounded-lg text-xs bg-white outline-none"/>
+                                        </div>
+                                        <div className="flex gap-2 pt-1">
+                                            <button onClick={saveSession} className={`flex-1 text-white py-2.5 rounded-lg font-black uppercase text-[10px] ${newS.id ? 'bg-amber-500 shadow-amber-500/20 shadow-lg' : 'bg-[#C23B22] shadow-red-600/20 shadow-lg'}`}>
+                                                {newS.id ? 'Änderung speichern' : 'Publizieren'}
+                                            </button>
+                                            {newS.id && <button onClick={() => setNewS({id:null, title:'', date:'', time:''})} className="bg-slate-200 px-4 rounded-lg text-[10px] font-black uppercase text-slate-600">X</button>}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-48 pt-2">
+                                        <p className="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Wähle zum Bearbeiten:</p>
+                                        {sessions.map(s => (
+                                            <div key={s.id} onClick={() => editSession(s)} className={`flex justify-between items-center p-3 rounded-xl border transition-all cursor-pointer ${newS.id === s.id ? 'border-amber-400 bg-amber-50 shadow-md' : 'bg-white border-slate-100 hover:bg-slate-50'}`}>
+                                                <div className="truncate pr-2 flex items-center gap-2">
+                                                    {newS.id === s.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>}
+                                                    <div>
+                                                        <p className="font-black text-[10px] truncate uppercase leading-tight">{s.title}</p>
+                                                        <p className="text-[8px] text-slate-400">{s.date} • {s.time}</p>
+                                                    </div>
+                                                </div>
+                                                <button onClick={(e) => { e.stopPropagation(); deleteSession(s.id); }} className="text-red-500 bg-red-100 hover:bg-red-200 p-2 rounded-lg flex items-center justify-center transition-colors">
+                                                    <Icons.Trash />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="snap-center min-w-full">
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px]">
+                                    <p className="text-[#C23B22] font-black uppercase italic mb-6 text-center text-xl tracking-tighter">Crew Management</p>
+                                    <div className="flex gap-2 mb-6">
+                                        <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Name" className="flex-1 p-3 rounded-xl text-sm border bg-slate-50 outline-none" />
+                                        <button onClick={addPlayer} className="bg-[#1F293A] text-white px-5 rounded-xl font-black">+</button>
+                                    </div>
+                                    <div className="space-y-2 max-h-64 overflow-y-auto no-scrollbar">
+                                        {players.map(p => (
+                                            <div key={p.id} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                                <div><p className="font-bold text-sm">{p.name}</p><span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase ${p.isBound ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>{p.isBound ? '📌 Gebunden' : '🔓 Frei'}</span></div>
+                                                <div className="flex gap-2">
+                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[8px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black shadow-sm">RESET</button>}
+                                                    <button onClick={() => deletePlayer(p.id)} className="text-[8px] bg-white border border-red-100 text-red-500 px-2 py-1 rounded-md font-bold">DEL</button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-center gap-2">{[0, 1].map(i => <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${activeIdx === i ? 'bg-[#C23B22] w-8' : 'bg-slate-200 w-2'}`}></div>)}</div>
+                    </div>
+                );
+            };
+
+            const DatesView = () => {
+                const today = new Date().toISOString().split('T')[0];
+                const activeSessions = sessions.filter(s => s.date >= today);
+                const resp = async (sid, r) => { if(!currentUser) return alert("Wähl dich erst aus!"); await db.collection('sessions').doc(sid).set({ responses: { [currentUser]: r } }, { merge: true }); };
+                
+                return (
+                    <div className="space-y-6 animate-fadeIn pb-10">
+                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[#1F293A]">Termine</h2>
+                        {activeSessions.length === 0 ? (
+                            <div className="py-20 text-center opacity-30 italic font-bold">Keine Termine geplant...</div>
+                        ) : (
+                            activeSessions.map(s => {
+                                const r = s.responses || {};
+                                const accepted = Object.entries(r).filter(([n, v]) => v === 'accepted').map(([n]) => n);
+                                const later = Object.entries(r).filter(([n, v]) => v === 'later').map(([n]) => n);
+                                const declined = Object.entries(r).filter(([n, v]) => v === 'declined').map(([n]) => n);
+
+                                return (
+                                    <div key={s.id} className="darts-card p-6 rounded-3xl relative">
+                                        <h3 className="text-xl font-black uppercase italic text-[#1F293A] leading-tight">{s.title}</h3>
+                                        <p className="text-[#C23B22] font-black text-xs mb-5 tracking-widest">{s.date} • {s.time} UHR</p>
+                                        
+                                        <div className="grid grid-cols-3 gap-3 mb-6 pt-1">
+                                            <button onClick={() => resp(s.id, 'accepted')} className="bg-emerald-600 text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Dabei</button>
+                                            <button onClick={() => resp(s.id, 'later')} className="bg-slate-500 text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Check</button>
+                                            <button onClick={() => resp(s.id, 'declined')} className="bg-[#C23B22] text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Raus</button>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            {[
+                                                { label: 'Zusagen', names: accepted, type: 'accepted' },
+                                                { label: 'Vielleicht', names: later, type: 'later' },
+                                                { label: 'Absagen', names: declined, type: 'declined' }
+                                            ].map(group => {
+                                                if (group.names.length === 0) return null;
+                                                return (
+                                                    <div key={group.label} className="flex flex-wrap gap-1.5 border-t border-slate-50 pt-2">
+                                                        <span className="text-[9px] font-black uppercase text-slate-300 w-full mb-1 flex justify-between items-center">
+                                                            {group.label}
+                                                            <span className="text-[12px] font-mono text-[#1F293A] bg-slate-100 px-1.5 py-0.5 rounded-full">{group.names.length}</span>
+                                                        </span>
+                                                        {group.names.map(name => (<span key={name} className={`px-2 py-0.5 rounded text-[10px] font-bold ${group.type === 'accepted' ? 'bg-emerald-50 text-emerald-600' : group.type === 'later' ? 'bg-slate-50 text-slate-500' : 'bg-red-50 text-red-600'}`}>{name}</span>))}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
+                );
+            };
+
+            const BeerView = () => {
+                const upd = async (id, ch) => { const b = beerStock.find(x => x.id === id); await db.collection('beer').doc(id).update({ count: Math.max(0, Math.min(b.max, b.count + ch)) }); };
+                return (
+                    <div className="space-y-4 animate-fadeIn pb-10">
+                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[#1F293A]">Keller</h2>
+                        {beerStock.map(b => (
+                            <div key={b.id} className="darts-card p-5 rounded-3xl">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div><p className="font-black text-lg uppercase leading-none text-[#1F293A]">{b.name}</p><p className="text-[10px] font-bold mt-1 text-slate-400 tracking-widest">{b.count} FLASCHEN</p></div>
+                                    <div className="flex gap-2"><button onClick={() => upd(b.id, -1)} className="bg-[#C23B22] text-white w-10 h-10 rounded-xl font-black text-xl shadow-sm">-</button><button onClick={() => upd(b.id, 1)} className="bg-emerald-600 text-white w-10 h-10 rounded-xl font-black text-xl shadow-sm">+</button></div>
+                                </div>
+                                <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200"><div className={`h-full transition-all duration-500 ${b.count < 5 ? 'bg-[#C23B22]' : 'bg-emerald-500'}`} style={{width: `${(b.count/b.max)*100}%`}}></div></div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            };
+
+            const StatsView = () => {
+                const games = ["501 DO", "Cricket", "Highscore", "Killer", "Around the Clock"];
+                const [activeIdx, setActiveIdx] = useState(0);
+                const handleScroll = (e) => { const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth); setActiveIdx(idx); };
+                return (
+                    <div className="animate-fadeIn">
+                        <div onScroll={handleScroll} className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-8 px-1">
+                            {games.map(game => (
+                                <div key={game} className="snap-center min-w-full">
+                                    <div className="darts-card pt-5 pb-6 px-6 rounded-[2.5rem] shadow-xl border-l-[#C23B22] border-r border-t border-b-8 border-b-slate-200 min-h-[510px]">
+                                        <h3 className="text-[#C23B22] font-black uppercase italic mb-5 text-center text-2xl tracking-tighter">{game}</h3>
+                                        <table className="w-full text-xs">
+                                            <thead><tr className="border-b border-slate-100 text-[10px] uppercase text-slate-400 tracking-widest"><th className="text-left py-3 w-8">#</th><th className="text-left">Name</th><th className="text-right">Avg</th></tr></thead>
+                                            <tbody>
+                                                {[...Array(10)].map((_, i) => (
+                                                    <tr key={i} className="border-b border-slate-50 last:border-none"><td className="py-2.5 font-black text-[#C23B22] text-sm">{i+1}</td><td className="font-bold text-slate-400 italic text-sm">Offline...</td><td className="text-right font-mono text-xs text-slate-300 opacity-60">0.0</td></tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex justify-center gap-2">{games.map((_, i) => (<div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${activeIdx === i ? 'bg-[#C23B22] w-8' : 'bg-slate-200 w-2'}`}></div>))}</div>
+                    </div>
+                );
+            };
+
+            const ChatView = () => {
+                const [chatInput, setChatInput] = useState("");
+                const scrollRef = useRef();
+                const colors = ['text-blue-500', 'text-emerald-500', 'text-orange-500', 'text-purple-500', 'text-pink-500', 'text-yellow-600'];
+
+                const getUserColor = (name) => {
+                    let hash = 0;
+                    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+                    return colors[Math.abs(hash) % colors.length];
+                };
+
+                const scrollToBottom = () => {
+                    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                };
+
+                useEffect(() => { scrollToBottom(); }, [messages]);
+
+                const handleFocus = () => {
+                    setTimeout(() => {
+                        scrollToBottom();
+                    }, 300);
+                };
+
+                const send = async () => { 
+                    if(!chatInput.trim() || !currentUser) return; 
+                    vibrate();
+                    await db.collection('chat').add({ 
+                        user: currentUser, 
+                        text: chatInput, 
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
+                        timeStr: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+                    }); 
+                    setChatInput(""); 
+                };
+
+                return (
+                    <div className="flex flex-col h-[70vh] -mt-4 -mx-2">
+                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar border-2 border-slate-200 rounded-[2rem] mx-2 mb-4 bg-slate-50/30 shadow-inner">
+                            {messages.map((m) => {
+                                const isMe = m.user === currentUser;
+                                return (
+                                    <div key={m.id} className={`flex flex-col animate-fadeIn ${isMe ? 'items-end' : 'items-start'}`}>
+                                        <div className={`max-w-[85%] p-3 shadow-sm ${isMe ? 'bg-[#C23B22] text-white msg-tail-right rounded-2xl' : 'bg-white text-[#1F293A] border border-slate-100 msg-tail-left rounded-2xl'}`}>
+                                            {!isMe && <p className={`text-[9px] font-black uppercase mb-1 tracking-wider ${getUserColor(m.user)}`}>{m.user}</p>}
+                                            <div className="flex flex-col">
+                                                <p className="text-sm font-medium leading-tight pr-6">{m.text}</p>
+                                                <p className={`text-[8px] font-bold mt-1 self-end ${isMe ? 'text-red-200' : 'text-slate-400'}`}>
+                                                    {m.timeStr || '...'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        
+                        <div className="px-3 pb-2 pt-1 flex items-center gap-2">
+                            <div className="flex-1 bg-white rounded-full flex items-center px-4 py-1 shadow-md border border-slate-200">
+                                <input 
+                                    value={chatInput} 
+                                    onFocus={handleFocus}
+                                    onChange={e => setChatInput(e.target.value)} 
+                                    onKeyPress={e => e.key === 'Enter' && send()} 
+                                    type="text" 
+                                    placeholder="Garage Talk..." 
+                                    className="flex-1 py-2.5 outline-none text-sm bg-transparent" 
+                                />
+                            </div>
+                            <button 
+                                onClick={send} 
+                                className="bg-[#1F293A] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform"
+                            >
+                                <Icons.Send />
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            if (isLoading) return <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC]"><div className="loader"></div></div>;
+
+            return (
+                <div className="max-w-md mx-auto min-h-screen flex flex-col bg-[#F8FAFC] shadow-2xl border-x border-slate-200 pb-24 relative">
+                    <header className="p-5 flex justify-between items-center border-b border-slate-200 sticky top-0 bg-white/90 backdrop-blur-md z-40">
+                        <div className="flex items-center gap-2"><span className="font-black italic text-2xl tracking-tighter text-[#1F293A]">G<span className="text-[#C23B22]">69</span></span><div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-red-500'}`}></div></div>
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => {vibrate(); setNotifsEnabled(!notifsEnabled);}} className="transition-all hover:scale-110">
+                                <Icons.Bell active={notifsEnabled} />
+                            </button>
+                            <span onDoubleClick={handleAdminLogin} className="text-[8px] bg-[#1F293A] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest cursor-pointer select-none">{version}</span>
+                        </div>
+                    </header>
+                    <main className="flex-1 p-4 overflow-y-auto no-scrollbar pb-10">
+                        {activeView === 'home' && <Dashboard />}
+                        {activeView === 'admin' && <AdminView />}
+                        {activeView === 'beer' && <BeerView />}
+                        {activeView === 'chat' && <ChatView />}
+                        {activeView === 'dates' && <DatesView />}
+                        {activeView === 'stats' && <StatsView />}
+                    </main>
+                    <nav className="fixed bottom-0 left-0 right-0 py-4 flex justify-around max-w-md mx-auto z-40 shadow-lg rounded-t-[2.5rem]">
+                        {[
+                            {id: 'home', icon: Icons.Home, label: 'HOME'}, {id: 'dates', icon: Icons.Plan, label: 'TERMINE'}, 
+                            {id: 'chat', icon: Icons.Talk, label: 'CHAT'}, {id: 'beer', icon: Icons.Bar, label: 'BAR'}, 
+                            {id: 'stats', icon: Icons.Rank, label: 'RANKING'},
+                            ...(isAdmin ? [{id: 'admin', icon: Icons.Admin, label: 'ADMIN'}] : [])
+                        ].map(item => (
+                            <button key={item.id} onClick={() => {vibrate(); setActiveView(item.id);}} className={`flex flex-col items-center flex-1 transition-all duration-300 ${activeView === item.id ? 'text-[#C23B22] -translate-y-1' : 'text-slate-400'}`}>
+                                <item.icon /><span className={`text-[8px] font-black mt-1 tracking-widest ${activeView === item.id ? 'opacity-100' : 'opacity-40'}`}>{item.label}</span>
+                                {activeView === item.id && <div className="w-1 h-1 bg-[#C23B22] rounded-full mt-1 animate-pulse"></div>}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
