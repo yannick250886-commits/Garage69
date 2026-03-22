@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Garage69 - Alpha 3.8.1</title>
+    <title>Garage69 - Alpha 3.8.2</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,7 +70,7 @@
         };
 
         function App() {
-            const version = "Alpha 3.8.1";
+            const version = "Alpha 3.8.2";
             const [activeView, setActiveView] = useState('home');
             const [isLoading, setIsLoading] = useState(true);
             const [isAdmin, setIsAdmin] = useState(false);
@@ -113,16 +113,16 @@
                             <div className="mt-2 p-5 darts-card rounded-2xl w-full max-w-[300px] border-l-0 border-t-4 border-t-[#C23B22]">
                                 {!currentUser ? (
                                     <div className="animate-fadeIn">
-                                        <p className="text-[10px] font-black uppercase mb-3 text-slate-400 tracking-widest text-center">Identität wählen</p>
-                                        <select onChange={(e) => { const p = players.find(x => x.name === e.target.value); if(p) selectIdentity(p.name, p.id); }} className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm w-full font-bold outline-none text-center cursor-pointer">
+                                        <p className="text-xs font-black uppercase mb-3 text-slate-400 tracking-widest text-center">Identität wählen</p>
+                                        <select onChange={(e) => { const p = players.find(x => x.name === e.target.value); if(p) selectIdentity(p.name, p.id); }} className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-base w-full font-bold outline-none text-center cursor-pointer">
                                             <option value="">Profil...</option>
                                             {players.filter(p => !p.isBound).map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
                                         </select>
                                     </div>
                                 ) : (
                                     <div className="py-2 animate-fadeIn">
-                                        <p className="text-[10px] font-black uppercase text-[#C23B22] mb-1 tracking-[0.2em]">Hallo</p>
-                                        <p className="text-2xl font-black text-[#1F293A] uppercase tracking-tighter">{currentUser}</p>
+                                        <p className="text-xs font-black uppercase text-[#C23B22] mb-1 tracking-[0.2em]">Hallo</p>
+                                        <p className="text-3xl font-black text-[#1F293A] uppercase tracking-tighter">{currentUser}</p>
                                     </div>
                                 )}
                             </div>
@@ -160,37 +160,37 @@
                     <div className="space-y-6 animate-fadeIn">
                         <div className="flex justify-between items-center px-2">
                             <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Admin HQ</h2>
-                            <button onClick={() => { setIsAdmin(false); setActiveView('home'); }} className="text-[10px] bg-slate-200 px-3 py-1 rounded-full font-bold">Logout</button>
+                            <button onClick={() => { setIsAdmin(false); setActiveView('home'); }} className="text-xs bg-slate-200 px-4 py-2 rounded-full font-bold">Logout</button>
                         </div>
 
                         <div onScroll={handleScroll} className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-4 px-1">
                             <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
                                 <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px] flex flex-col relative border-amber-400 border border-4 border-amber-100">
                                     <p className="text-[#C23B22] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">Terminverwaltung</p>
-                                    <div className="space-y-2 mb-6 border-b border-slate-100 pb-4 bg-slate-50/50 p-3 rounded-2xl relative">
-                                        {newS.id && <span className="absolute top-2 right-2 text-[8px] bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-black uppercase">Modus: Edit</span>}
-                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{newS.id ? '📍 Bearbeitung' : '✨ Neuer Termin'}</p>
-                                        <input value={newS.title} onChange={e => setNewS({...newS, title: e.target.value})} placeholder="Event Name" className="w-full p-2 border rounded-lg text-sm bg-white outline-none font-bold"/>
+                                    <div className="space-y-3 mb-6 border-b border-slate-100 pb-4 bg-slate-50/50 p-3 rounded-2xl relative">
+                                        {newS.id && <span className="absolute top-2 right-2 text-[10px] bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-black uppercase">Edit</span>}
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{newS.id ? '📍 Bearbeitung' : '✨ Neuer Termin'}</p>
+                                        <input value={newS.title} onChange={e => setNewS({...newS, title: e.target.value})} placeholder="Event Name" className="w-full p-3 border rounded-lg text-base bg-white outline-none font-bold"/>
                                         <div className="flex gap-2">
-                                            <input type="date" value={newS.date} onChange={e => setNewS({...newS, date: e.target.value})} className="flex-1 p-2 border rounded-lg text-xs bg-white outline-none"/>
-                                            <input type="time" value={newS.time} onChange={e => setNewS({...newS, time: e.target.value})} className="flex-1 p-2 border rounded-lg text-xs bg-white outline-none"/>
+                                            <input type="date" value={newS.date} onChange={e => setNewS({...newS, date: e.target.value})} className="flex-1 p-3 border rounded-lg text-sm bg-white outline-none"/>
+                                            <input type="time" value={newS.time} onChange={e => setNewS({...newS, time: e.target.value})} className="flex-1 p-3 border rounded-lg text-sm bg-white outline-none"/>
                                         </div>
                                         <div className="flex gap-2 pt-1">
-                                            <button onClick={saveSession} className={`flex-1 text-white py-2.5 rounded-lg font-black uppercase text-[10px] ${newS.id ? 'bg-amber-500 shadow-amber-500/20 shadow-lg' : 'bg-[#C23B22] shadow-red-600/20 shadow-lg'}`}>
+                                            <button onClick={saveSession} className={`flex-1 text-white py-3 rounded-lg font-black uppercase text-xs ${newS.id ? 'bg-amber-500 shadow-amber-500/20 shadow-lg' : 'bg-[#C23B22] shadow-red-600/20 shadow-lg'}`}>
                                                 {newS.id ? 'Änderung speichern' : 'Publizieren'}
                                             </button>
-                                            {newS.id && <button onClick={() => setNewS({id:null, title:'', date:'', time:''})} className="bg-slate-200 px-4 rounded-lg text-[10px] font-black uppercase text-slate-600">X</button>}
+                                            {newS.id && <button onClick={() => setNewS({id:null, title:'', date:'', time:''})} className="bg-slate-200 px-4 rounded-lg text-xs font-black uppercase text-slate-600">X</button>}
                                         </div>
                                     </div>
                                     <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-48 pt-2">
-                                        <p className="text-[8px] font-black text-slate-400 uppercase mb-1 tracking-widest">Wähle zum Bearbeiten:</p>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Wähle zum Bearbeiten:</p>
                                         {sessions.map(s => (
                                             <div key={s.id} onClick={() => editSession(s)} className={`flex justify-between items-center p-3 rounded-xl border transition-all cursor-pointer ${newS.id === s.id ? 'border-amber-400 bg-amber-50 shadow-md' : 'bg-white border-slate-100 hover:bg-slate-50'}`}>
                                                 <div className="truncate pr-2 flex items-center gap-2">
                                                     {newS.id === s.id && <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>}
                                                     <div>
-                                                        <p className="font-black text-[10px] truncate uppercase leading-tight">{s.title}</p>
-                                                        <p className="text-[8px] text-slate-400">{s.date} • {s.time}</p>
+                                                        <p className="font-black text-xs truncate uppercase leading-tight">{s.title}</p>
+                                                        <p className="text-[10px] text-slate-400">{s.date} • {s.time}</p>
                                                     </div>
                                                 </div>
                                                 <button onClick={(e) => { e.stopPropagation(); deleteSession(s.id); }} className="text-red-500 bg-red-100 hover:bg-red-200 p-2 rounded-lg flex items-center justify-center transition-colors">
@@ -206,16 +206,16 @@
                                 <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[480px]">
                                     <p className="text-[#C23B22] font-black uppercase italic mb-6 text-center text-xl tracking-tighter">Crew Management</p>
                                     <div className="flex gap-2 mb-6">
-                                        <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Name" className="flex-1 p-3 rounded-xl text-sm border bg-slate-50 outline-none" />
+                                        <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Name" className="flex-1 p-3 rounded-xl text-base border bg-slate-50 outline-none" />
                                         <button onClick={addPlayer} className="bg-[#1F293A] text-white px-5 rounded-xl font-black">+</button>
                                     </div>
                                     <div className="space-y-2 max-h-64 overflow-y-auto no-scrollbar">
                                         {players.map(p => (
                                             <div key={p.id} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                                <div><p className="font-bold text-sm">{p.name}</p><span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase ${p.isBound ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>{p.isBound ? '📌 Gebunden' : '🔓 Frei'}</span></div>
+                                                <div><p className="font-bold text-base">{p.name}</p><span className={`text-[10px] font-black px-2 py-0.5 rounded uppercase ${p.isBound ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>{p.isBound ? '📌 Gebunden' : '🔓 Frei'}</span></div>
                                                 <div className="flex gap-2">
-                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[8px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black shadow-sm">RESET</button>}
-                                                    <button onClick={() => deletePlayer(p.id)} className="text-[8px] bg-white border border-red-100 text-red-500 px-2 py-1 rounded-md font-bold">DEL</button>
+                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[10px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black shadow-sm">RESET</button>}
+                                                    <button onClick={() => deletePlayer(p.id)} className="text-[10px] bg-white border border-red-100 text-red-500 px-2 py-1 rounded-md font-bold">DEL</button>
                                                 </div>
                                             </div>
                                         ))}
@@ -247,16 +247,16 @@
 
                                     return (
                                         <div key={s.id} className="darts-card p-6 rounded-3xl relative h-full flex flex-col">
-                                            <h3 className="text-xl font-black uppercase italic text-[#1F293A] leading-tight">{s.title}</h3>
-                                            <p className="text-[#C23B22] font-black text-xs mb-5 tracking-widest">{s.date} • {s.time} UHR</p>
+                                            <h3 className="text-2xl font-black uppercase italic text-[#1F293A] leading-tight">{s.title}</h3>
+                                            <p className="text-[#C23B22] font-black text-sm mb-5 tracking-widest">{s.date} • {s.time} UHR</p>
                                             
                                             <div className="grid grid-cols-3 gap-3 mb-6 pt-1">
-                                                <button onClick={() => resp(s.id, 'accepted')} className="bg-emerald-600 text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Dabei</button>
-                                                <button onClick={() => resp(s.id, 'later')} className="bg-slate-500 text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Check</button>
-                                                <button onClick={() => resp(s.id, 'declined')} className="bg-[#C23B22] text-white py-3 rounded-xl font-black text-[12px] uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Raus</button>
+                                                <button onClick={() => resp(s.id, 'accepted')} className="bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Dabei</button>
+                                                <button onClick={() => resp(s.id, 'later')} className="bg-slate-500 text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Check</button>
+                                                <button onClick={() => resp(s.id, 'declined')} className="bg-[#C23B22] text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Raus</button>
                                             </div>
 
-                                            <div className="space-y-3 mt-auto">
+                                            <div className="space-y-4 mt-auto">
                                                 {[
                                                     { label: 'Zusagen', names: accepted, type: 'accepted' },
                                                     { label: 'Vielleicht', names: later, type: 'later' },
@@ -264,12 +264,12 @@
                                                 ].map(group => {
                                                     if (group.names.length === 0) return null;
                                                     return (
-                                                        <div key={group.label} className="flex flex-wrap gap-1.5 border-t border-slate-50 pt-2">
-                                                            <span className="text-[9px] font-black uppercase text-slate-300 w-full mb-1 flex justify-between items-center">
+                                                        <div key={group.label} className="flex flex-wrap gap-1.5 border-t border-slate-50 pt-3">
+                                                            <span className="text-xs font-black uppercase text-slate-400 w-full mb-1 flex justify-between items-center">
                                                                 {group.label}
-                                                                <span className="text-[12px] font-mono text-[#1F293A] bg-slate-100 px-1.5 py-0.5 rounded-full">{group.names.length}</span>
+                                                                <span className="text-sm font-mono text-[#1F293A] bg-slate-100 px-2 py-0.5 rounded-full">{group.names.length}</span>
                                                             </span>
-                                                            {group.names.map(name => (<span key={name} className={`px-2 py-0.5 rounded text-[10px] font-bold ${group.type === 'accepted' ? 'bg-emerald-50 text-emerald-600' : group.type === 'later' ? 'bg-slate-50 text-slate-500' : 'bg-red-50 text-red-600'}`}>{name}</span>))}
+                                                            {group.names.map(name => (<span key={name} className={`px-3 py-1 rounded text-xs font-bold ${group.type === 'accepted' ? 'bg-emerald-50 text-emerald-600' : group.type === 'later' ? 'bg-slate-50 text-slate-500' : 'bg-red-50 text-red-600'}`}>{name}</span>))}
                                                         </div>
                                                     );
                                                 })}
@@ -290,12 +290,12 @@
                         <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[#1F293A] mb-6">Keller</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {beerStock.map(b => (
-                                <div key={b.id} className="darts-card p-5 rounded-3xl h-full flex flex-col justify-between">
+                                <div key={b.id} className="darts-card p-6 rounded-3xl h-full flex flex-col justify-between">
                                     <div className="flex justify-between items-center mb-4">
-                                        <div><p className="font-black text-lg uppercase leading-none text-[#1F293A]">{b.name}</p><p className="text-[10px] font-bold mt-1 text-slate-400 tracking-widest">{b.count} FLASCHEN</p></div>
-                                        <div className="flex gap-2"><button onClick={() => upd(b.id, -1)} className="bg-[#C23B22] text-white w-10 h-10 rounded-xl font-black text-xl shadow-sm">-</button><button onClick={() => upd(b.id, 1)} className="bg-emerald-600 text-white w-10 h-10 rounded-xl font-black text-xl shadow-sm">+</button></div>
+                                        <div><p className="font-black text-xl uppercase leading-none text-[#1F293A]">{b.name}</p><p className="text-xs font-bold mt-2 text-slate-400 tracking-widest">{b.count} FLASCHEN</p></div>
+                                        <div className="flex gap-2"><button onClick={() => upd(b.id, -1)} className="bg-[#C23B22] text-white w-12 h-12 rounded-xl font-black text-2xl shadow-sm">-</button><button onClick={() => upd(b.id, 1)} className="bg-emerald-600 text-white w-12 h-12 rounded-xl font-black text-2xl shadow-sm">+</button></div>
                                     </div>
-                                    <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200"><div className={`h-full transition-all duration-500 ${b.count < 5 ? 'bg-[#C23B22]' : 'bg-emerald-500'}`} style={{width: `${(b.count/b.max)*100}%`}}></div></div>
+                                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200"><div className={`h-full transition-all duration-500 ${b.count < 5 ? 'bg-[#C23B22]' : 'bg-emerald-500'}`} style={{width: `${(b.count/b.max)*100}%`}}></div></div>
                                 </div>
                             ))}
                         </div>
@@ -314,11 +314,11 @@
                                 <div key={game} className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
                                     <div className="darts-card pt-5 pb-6 px-6 rounded-[2.5rem] shadow-xl border-l-[#C23B22] border-r border-t border-b-8 border-b-slate-200 min-h-[510px]">
                                         <h3 className="text-[#C23B22] font-black uppercase italic mb-5 text-center text-2xl tracking-tighter">{game}</h3>
-                                        <table className="w-full text-xs">
-                                            <thead><tr className="border-b border-slate-100 text-[10px] uppercase text-slate-400 tracking-widest"><th className="text-left py-3 w-8">#</th><th className="text-left">Name</th><th className="text-right">Avg</th></tr></thead>
+                                        <table className="w-full text-sm">
+                                            <thead><tr className="border-b border-slate-100 text-xs uppercase text-slate-400 tracking-widest"><th className="text-left py-3 w-8">#</th><th className="text-left">Name</th><th className="text-right">Avg</th></tr></thead>
                                             <tbody>
                                                 {[...Array(10)].map((_, i) => (
-                                                    <tr key={i} className="border-b border-slate-50 last:border-none"><td className="py-2.5 font-black text-[#C23B22] text-sm">{i+1}</td><td className="font-bold text-slate-400 italic text-sm">Offline...</td><td className="text-right font-mono text-xs text-slate-300 opacity-60">0.0</td></tr>
+                                                    <tr key={i} className="border-b border-slate-50 last:border-none"><td className="py-3 font-black text-[#C23B22] text-base">{i+1}</td><td className="font-bold text-slate-400 italic text-base">Offline...</td><td className="text-right font-mono text-sm text-slate-300 opacity-60">0.0</td></tr>
                                                 ))}
                                             </tbody>
                                         </table>
@@ -364,16 +364,16 @@
 
                 return (
                     <div className="flex flex-col h-[70vh] -mt-4 -mx-2 max-w-3xl mx-auto">
-                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar border-2 border-slate-200 rounded-[2rem] mx-2 mb-4 bg-slate-50/30 shadow-inner">
+                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar border-2 border-slate-200 rounded-[2rem] mx-2 mb-4 bg-slate-50/30 shadow-inner">
                             {messages.map((m) => {
                                 const isMe = m.user === currentUser;
                                 return (
                                     <div key={m.id} className={`flex flex-col animate-fadeIn ${isMe ? 'items-end' : 'items-start'}`}>
-                                        <div className={`max-w-[85%] p-3 shadow-sm ${isMe ? 'bg-[#C23B22] text-white msg-tail-right rounded-2xl' : 'bg-white text-[#1F293A] border border-slate-100 msg-tail-left rounded-2xl'}`}>
-                                            {!isMe && <p className={`text-[9px] font-black uppercase mb-1 tracking-wider ${getUserColor(m.user)}`}>{m.user}</p>}
+                                        <div className={`max-w-[85%] p-4 shadow-sm ${isMe ? 'bg-[#C23B22] text-white msg-tail-right rounded-2xl' : 'bg-white text-[#1F293A] border border-slate-100 msg-tail-left rounded-2xl'}`}>
+                                            {!isMe && <p className={`text-xs font-black uppercase mb-1 tracking-wider ${getUserColor(m.user)}`}>{m.user}</p>}
                                             <div className="flex flex-col">
-                                                <p className="text-sm font-medium leading-tight pr-6">{m.text}</p>
-                                                <p className={`text-[8px] font-bold mt-1 self-end ${isMe ? 'text-red-200' : 'text-slate-400'}`}>
+                                                <p className="text-base font-medium leading-tight pr-6">{m.text}</p>
+                                                <p className={`text-[10px] font-bold mt-2 self-end ${isMe ? 'text-red-200' : 'text-slate-400'}`}>
                                                     {m.timeStr || '...'}
                                                 </p>
                                             </div>
@@ -391,10 +391,10 @@
                                     onKeyPress={e => e.key === 'Enter' && send()} 
                                     type="text" 
                                     placeholder="Garage Talk..." 
-                                    className="flex-1 py-2.5 outline-none text-sm bg-transparent" 
+                                    className="flex-1 py-3 outline-none text-base bg-transparent" 
                                 />
                             </div>
-                            <button onClick={send} className="bg-[#1F293A] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform"><Icons.Send /></button>
+                            <button onClick={send} className="bg-[#1F293A] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform"><Icons.Send /></button>
                         </div>
                     </div>
                 );
@@ -417,7 +417,7 @@
                                     if (permission === "granted") new Notification("Garage69", { body: "Benachrichtigungen aktiv!", icon: LOGO_URL });
                                 }
                             }} className="transition-all hover:scale-110"><Icons.Bell active={notifsEnabled} /></button>
-                            <span onDoubleClick={handleAdminLogin} className="text-[8px] bg-[#1F293A] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest cursor-pointer select-none">{version}</span>
+                            <span onDoubleClick={handleAdminLogin} className="text-[10px] bg-[#1F293A] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest cursor-pointer select-none">{version}</span>
                         </div>
                     </header>
                     <main className="flex-1 p-4 md:p-8 overflow-y-auto no-scrollbar pb-10">
@@ -436,8 +436,8 @@
                             ...(isAdmin ? [{id: 'admin', icon: Icons.Admin, label: 'ADMIN'}] : [])
                         ].map(item => (
                             <button key={item.id} onClick={() => {vibrate(); setActiveView(item.id);}} className={`flex flex-col items-center flex-1 transition-all duration-300 ${activeView === item.id ? 'text-[#C23B22] -translate-y-1' : 'text-slate-400'}`}>
-                                <item.icon /><span className={`text-[8px] font-black mt-1 tracking-widest ${activeView === item.id ? 'opacity-100' : 'opacity-40'}`}>{item.label}</span>
-                                {activeView === item.id && <div className="w-1 h-1 bg-[#C23B22] rounded-full mt-1 animate-pulse"></div>}
+                                <item.icon /><span className={`text-[10px] font-black mt-1 tracking-widest ${activeView === item.id ? 'opacity-100' : 'opacity-40'}`}>{item.label}</span>
+                                {activeView === item.id && <div className="w-1.5 h-1.5 bg-[#C23B22] rounded-full mt-1 animate-pulse"></div>}
                             </button>
                         ))}
                     </nav>
