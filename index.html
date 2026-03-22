@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Garage69 - Alpha 3.9.0</title>
+    <title>Garage69 - Alpha 3.9.2</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSI0MCIgZmlsbD0iI0ZGRkZGRiIvPjx0ZXh0IHg9IjIwIiB5PSIxMjUiIGZpbGw9IiMwRDE3MkEiIHN0eWxlPSJmb250LWZhbWlseTonSW50ZXInLHNhbnMtc2VyaWY7Zm9udC13ZWlnaHQ6OTAwO2ZvbnQtc2l6ZToxMDBweDtsZXR0ZXItc3BhY2luZzotNXB4OyI+RzwvdGV4dD48dGV4dCB4PSI4NSIgeT0iMTI1IiBmaWxsPSIjQzIzQjIyIiBzdHlsZT0iZm9udDpmYXZpbHk6J0ludGVyJyxzYW5zLXNlcmlmO2ZvbnQtd2VpZ2h0OjkwMDtmb250LXNpemU6MTAwcHg7bGV0dGVyLXNwYWNpbmc6LTVweDsiPjY5PC90ZXh0Pjwvc3ZnPg==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI4IiBmaWxsPSIjRkZGRkZGIi8+PHRleHQgeD0iMiIgeT0iMjIiIGZpbGw9IiMwRDE3MkEiIHN0eWxlPSJmb250LWZhbWlseTonSW50ZXInLHNhbnMtc2VyaWY7Zm9udC13ZWlnaHQ6OTAwO2ZvbnQtc2l6ZToxOHB4OyI+RzwvdGV4dD48dGV4dCB4PSIxNCIgeT0iMjIiIGZpbGw9IiNDMjNCMjIiIHN0eWxlPSJmb250LWZhbWlseTonSW50ZXInLHNhbnMtc2VyaWY7Zm9udC13ZWlnaHQ6OTAwO2ZvbnQtc2l6ZToxOHB4OyI+Njk8L3RleHQ+jwvc3ZnPg==">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -70,7 +73,7 @@
         };
 
         function App() {
-            const version = "Alpha 3.9.0";
+            const version = "Alpha 3.9.2";
             const [activeView, setActiveView] = useState('home');
             const [isLoading, setIsLoading] = useState(true);
             const [isAdmin, setIsAdmin] = useState(false);
@@ -225,42 +228,43 @@
 
                             {/* News Management */}
                             <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
-                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px] flex flex-col border-[#1F293A] border-4 border border-slate-100">
-                                    <p className="text-[#1F293A] font-black uppercase italic mb-4 text-center text-xl tracking-tighter">News Board</p>
-                                    <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl">
-                                        <textarea value={newsText} onChange={e => setNewsText(e.target.value)} placeholder="Was gibt's Neues?" className="w-full p-3 border rounded-xl text-sm bg-white outline-none h-24 resize-none font-medium"></textarea>
-                                        <input type="date" value={newsDate} onChange={e => setNewsDate(e.target.value)} className="w-full p-3 border rounded-xl text-sm bg-white outline-none"/>
-                                        <button onClick={addNews} className="w-full bg-[#1F293A] text-white py-3 rounded-xl font-black uppercase text-xs">Posten</button>
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px] flex flex-col border-emerald-400 border border-4 border-emerald-100">
+                                    <p className="text-emerald-600 font-black uppercase italic mb-4 text-center text-xl tracking-tighter">News Board</p>
+                                    <div className="space-y-3 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                        <textarea value={newsText} onChange={e => setNewsText(e.target.value)} placeholder="Was gibt's Neues?" className="w-full p-3 border rounded-lg text-sm bg-white outline-none h-24 resize-none"></textarea>
+                                        <input type="date" value={newsDate} onChange={e => setNewsDate(e.target.value)} className="w-full p-3 border rounded-lg text-sm bg-white outline-none"/>
+                                        <button onClick={addNews} className="w-full bg-emerald-600 text-white py-3 rounded-lg font-black uppercase text-xs">Posten</button>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2">
+                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-48">
                                         {news.map(n => (
-                                            <div key={n.id} className="p-3 bg-white border border-slate-100 rounded-xl flex justify-between items-start">
-                                                <div className="flex-1 pr-2">
-                                                    <p className="text-[9px] font-black text-slate-400">{n.date}</p>
-                                                    <p className="text-xs font-bold leading-tight">{n.content}</p>
-                                                </div>
-                                                <button onClick={() => deleteNews(n.id)} className="text-red-400 p-1"><Icons.Trash /></button>
+                                            <div key={n.id} className="p-3 rounded-xl border bg-white border-slate-100 space-y-1">
+                                                <p className="text-[9px] text-slate-400 font-bold">{new Date(n.date).toLocaleDateString()}</p>
+                                                <p className="text-xs font-medium text-slate-700 leading-snug line-clamp-2">{n.content}</p>
+                                                <button onClick={() => deleteNews(n.id)} className="text-red-500 text-[10px] font-bold">Löschen</button>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Crew Management */}
+                            {/* Member-Verwaltung */}
                             <div className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
-                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px]">
-                                    <p className="text-[#C23B22] font-black uppercase italic mb-6 text-center text-xl tracking-tighter">Crew</p>
-                                    <div className="flex gap-2 mb-6">
-                                        <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Name" className="flex-1 p-3 rounded-xl text-base border bg-slate-50 outline-none" />
-                                        <button onClick={addPlayer} className="bg-[#1F293A] text-white px-5 rounded-xl font-black">+</button>
+                                <div className="darts-card p-6 rounded-[2.5rem] shadow-xl min-h-[520px] flex flex-col border-sky-400 border border-4 border-sky-100">
+                                    <p className="text-sky-600 font-black uppercase italic mb-4 text-center text-xl tracking-tighter">Members</p>
+                                    <div className="flex gap-2 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                        <input value={newPlayerName} onChange={e => setNewPlayerName(e.target.value)} placeholder="Neuer Name" className="flex-1 p-3 border rounded-lg text-base bg-white outline-none font-bold"/>
+                                        <button onClick={addPlayer} className="bg-sky-600 text-white px-5 rounded-lg font-black uppercase text-xs">Add</button>
                                     </div>
-                                    <div className="space-y-2 max-h-64 overflow-y-auto no-scrollbar">
+                                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-72">
                                         {players.map(p => (
-                                            <div key={p.id} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                                <div><p className="font-bold text-base">{p.name}</p></div>
-                                                <div className="flex gap-2">
-                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-[10px] bg-white border border-amber-200 text-amber-600 px-2 py-1 rounded-md font-black">RESET</button>}
-                                                    <button onClick={() => deletePlayer(p.id)} className="text-[10px] bg-white border border-red-100 text-red-500 px-2 py-1 rounded-md font-bold">DEL</button>
+                                            <div key={p.id} className="flex justify-between items-center p-3 rounded-xl border bg-white border-slate-100">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`w-2 h-2 rounded-full ${p.isBound ? 'bg-emerald-500' : 'bg-slate-300'}`}></span>
+                                                    <p className="font-bold text-sm">{p.name}</p>
+                                                </div>
+                                                <div className="flex gap-1">
+                                                    {p.isBound && <button onClick={() => resetPlayer(p.id)} className="text-amber-600 bg-amber-50 p-2 rounded-lg text-[10px] font-bold">Reset</button>}
+                                                    <button onClick={() => deletePlayer(p.id)} className="text-red-500 p-2"><Icons.Trash /></button>
                                                 </div>
                                             </div>
                                         ))}
@@ -268,229 +272,239 @@
                                 </div>
                             </div>
                         </div>
+                        {/* Pagination Dots */}
+                        <div className="flex justify-center gap-2 mt-[-10px]">
+                            {[0,1,2].map(i => <div key={i} className={`w-2 h-2 rounded-full transition-all ${activeIdx === i ? 'bg-[#C23B22] w-4' : 'bg-slate-300'}`}></div>)}
+                        </div>
                     </div>
                 );
             };
 
-            const DatesView = () => {
-                const today = new Date().toISOString().split('T')[0];
-                const activeSessions = sessions.filter(s => s.date >= today);
-                const resp = async (sid, r) => { if(!currentUser) return alert("Wähl dich erst aus!"); await db.collection('sessions').doc(sid).set({ responses: { [currentUser]: r } }, { merge: true }); };
-                
+            const PlanView = () => {
+                const updateResponse = async (sessionId, status) => { if (!currentUser) { alert("Wer bist du? Bitte auf Home-Screen Profil wählen."); return; } vibrate(); const s = sessions.find(x => x.id === sessionId); const resp = s.responses || {}; resp[currentUser] = status; await db.collection('sessions').doc(sessionId).update({ responses: resp }); };
+                const getRespCount = (s, status) => Object.values(s.responses || {}).filter(v => v === status).length;
+                const getMyResp = (s) => (s.responses || {})[currentUser] || null;
+
+                const sortedSessions = sessions
+                    .filter(s => new Date(s.date) >= new Date().setHours(0,0,0,0))
+                    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
                 return (
-                    <div className="space-y-6 animate-fadeIn pb-10 px-1">
-                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[#1F293A]">Termine</h2>
-                        {activeSessions.length === 0 ? (
-                            <div className="py-20 text-center opacity-30 italic font-bold">Keine Termine geplant...</div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {activeSessions.map(s => {
-                                    const r = s.responses || {};
-                                    const accepted = Object.entries(r).filter(([n, v]) => v === 'accepted').map(([n]) => n);
-                                    const later = Object.entries(r).filter(([n, v]) => v === 'later').map(([n]) => n);
-                                    const declined = Object.entries(r).filter(([n, v]) => v === 'declined').map(([n]) => n);
-
-                                    return (
-                                        <div key={s.id} className="darts-card p-6 rounded-3xl relative h-full flex flex-col">
-                                            <h3 className="text-2xl font-black uppercase italic text-[#1F293A] leading-tight">{s.title}</h3>
-                                            <p className="text-[#C23B22] font-black text-sm mb-5 tracking-widest">{s.date} • {s.time} UHR</p>
-                                            
-                                            <div className="grid grid-cols-3 gap-3 mb-6 pt-1">
-                                                <button onClick={() => resp(s.id, 'accepted')} className="bg-emerald-600 text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Dabei</button>
-                                                <button onClick={() => resp(s.id, 'later')} className="bg-slate-500 text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Check</button>
-                                                <button onClick={() => resp(s.id, 'declined')} className="bg-[#C23B22] text-white py-4 rounded-xl font-black text-sm uppercase flex flex-col items-center shadow-lg active:scale-95 transition-transform">Raus</button>
-                                            </div>
-
-                                            <div className="space-y-4 mt-auto">
-                                                {[
-                                                    { label: 'Zusagen', names: accepted, type: 'accepted' },
-                                                    { label: 'Vielleicht', names: later, type: 'later' },
-                                                    { label: 'Absagen', names: declined, type: 'declined' }
-                                                ].map(group => {
-                                                    if (group.names.length === 0) return null;
-                                                    return (
-                                                        <div key={group.label} className="flex flex-wrap gap-1.5 border-t border-slate-50 pt-3">
-                                                            <span className="text-xs font-black uppercase text-slate-400 w-full mb-1 flex justify-between items-center">
-                                                                {group.label}
-                                                                <span className="text-sm font-mono text-[#1F293A] bg-slate-100 px-2 py-0.5 rounded-full">{group.names.length}</span>
-                                                            </span>
-                                                            {group.names.map(name => (<span key={name} className={`px-3 py-1 rounded text-xs font-bold ${group.type === 'accepted' ? 'bg-emerald-50 text-emerald-600' : group.type === 'later' ? 'bg-slate-50 text-slate-500' : 'bg-red-50 text-red-600'}`}>{name}</span>))}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
+                    <div className="space-y-5 animate-fadeIn px-1">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Dates</h2>
+                            <p className="text-xs font-bold text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-100">{sortedSessions.length} kommende Events</p>
+                        </div>
+                        {sortedSessions.map((s, idx) => {
+                            const dateObj = new Date(s.date);
+                            const isToday = dateObj.toDateString() === new Date().toDateString();
+                            const myResp = getMyResp(s);
+                            
+                            return (
+                                <div key={s.id} className={`darts-card p-5 rounded-[2rem] relative ${idx === 0 ? 'border-l-[6px] shadow-lg' : ''}`}>
+                                    {isToday && <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">Heute</span>}
+                                    <div className="flex justify-between items-start gap-4 mb-4">
+                                        <div className="flex-1">
+                                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{dateObj.toLocaleDateString('de-DE', { weekday: 'long' })}</p>
+                                            <p className="text-2xl font-black text-[#1F293A] tracking-tighter leading-tight">{dateObj.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} <span className="text-lg text-slate-400 font-bold">/ {s.time} Uhr</span></p>
+                                            <p className="font-bold text-sm text-slate-600 mt-1 uppercase tracking-wide">{s.title}</p>
                                         </div>
-                                    );
-                                })}
+                                        <div className="text-right flex flex-col gap-1 items-end min-w-[70px]">
+                                            <div className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full"><span className="font-black text-lg">{getRespCount(s, 'yes')}</span> <span className="text-xs font-bold uppercase">Dabei</span></div>
+                                            <div className="flex items-center gap-1.5 text-red-600 bg-red-50 px-3 py-1 rounded-full"><span className="font-black text-lg">{getRespCount(s, 'no')}</span> <span className="text-xs font-bold uppercase">Raus</span></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100">
+                                        <button onClick={() => updateResponse(s.id, 'yes')} className={`flex items-center justify-center gap-2 p-3.5 rounded-xl font-black uppercase text-xs transition-all ${myResp === 'yes' ? 'bg-emerald-600 text-white shadow-inner' : 'bg-slate-100 text-slate-600'}`}>
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                            Zusage
+                                        </button>
+                                        <button onClick={() => updateResponse(s.id, 'no')} className={`flex items-center justify-center gap-2 p-3.5 rounded-xl font-black uppercase text-xs transition-all ${myResp === 'no' ? 'bg-red-600 text-white shadow-inner' : 'bg-slate-100 text-slate-600'}`}>
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                            Absage
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {sortedSessions.length === 0 && <div className="text-center py-12 text-slate-400 font-medium italic darts-card rounded-2xl bg-slate-50 border-dashed">Keine Termine geplant...</div>}
+                    </div>
+                );
+            };
+
+            const TalkView = () => {
+                const [newMsg, setNewMsg] = useState("");
+                const bottomRef = useRef(null);
+                useEffect(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), [messages]);
+
+                const sendMsg = async () => { if(!currentUser || !newMsg.trim()) return; await db.collection('chat').add({ user: currentUser, text: newMsg.trim(), timestamp: firebase.firestore.FieldValue.serverTimestamp() }); setNewMsg(""); vibrate(); };
+
+                return (
+                    <div className="h-[calc(100vh-160px)] flex flex-col animate-fadeIn">
+                        <div className="flex justify-between items-center mb-4 px-1">
+                            <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Garage Talk</h2>
+                            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${isOnline ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
+                                <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-red-500'} ${isOnline ? 'animate-pulse' : ''}`}></span>
+                                {isOnline ? 'Live' : 'Offline'}
                             </div>
-                        )}
-                    </div>
-                );
-            };
-
-            const BeerView = () => {
-                const upd = async (id, ch) => { const b = beerStock.find(x => x.id === id); await db.collection('beer').doc(id).update({ count: Math.max(0, Math.min(b.max, b.count + ch)) }); };
-                return (
-                    <div className="animate-fadeIn pb-10 px-1">
-                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-[#1F293A] mb-6">Keller</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {beerStock.map(b => (
-                                <div key={b.id} className="darts-card p-6 rounded-3xl h-full flex flex-col justify-between">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <div><p className="font-black text-xl uppercase leading-none text-[#1F293A]">{b.name}</p><p className="text-xs font-bold mt-2 text-slate-400 tracking-widest">{b.count} FLASCHEN</p></div>
-                                        <div className="flex gap-2"><button onClick={() => upd(b.id, -1)} className="bg-[#C23B22] text-white w-12 h-12 rounded-xl font-black text-2xl shadow-sm">-</button><button onClick={() => upd(b.id, 1)} className="bg-emerald-600 text-white w-12 h-12 rounded-xl font-black text-2xl shadow-sm">+</button></div>
-                                    </div>
-                                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200"><div className={`h-full transition-all duration-500 ${b.count < 5 ? 'bg-[#C23B22]' : 'bg-emerald-500'}`} style={{width: `${(b.count/b.max)*100}%`}}></div></div>
-                                </div>
-                            ))}
                         </div>
-                    </div>
-                );
-            };
-
-            const StatsView = () => {
-                const games = ["501 DO", "Cricket", "Highscore", "Killer", "Around the Clock"];
-                const [activeIdx, setActiveIdx] = useState(0);
-                const handleScroll = (e) => { const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth); setActiveIdx(idx); };
-                return (
-                    <div className="animate-fadeIn">
-                        <div onScroll={handleScroll} className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-8 px-1">
-                            {games.map(game => (
-                                <div key={game} className="snap-center min-w-full md:min-w-[50%] lg:min-w-[40%]">
-                                    <div className="darts-card pt-5 pb-6 px-6 rounded-[2.5rem] shadow-xl border-l-[#C23B22] border-r border-t border-b-8 border-b-slate-200 min-h-[510px]">
-                                        <h3 className="text-[#C23B22] font-black uppercase italic mb-5 text-center text-2xl tracking-tighter">{game}</h3>
-                                        <table className="w-full text-sm">
-                                            <thead><tr className="border-b border-slate-100 text-xs uppercase text-slate-400 tracking-widest"><th className="text-left py-3 w-8">#</th><th className="text-left">Name</th><th className="text-right">Avg</th></tr></thead>
-                                            <tbody>
-                                                {[...Array(10)].map((_, i) => (
-                                                    <tr key={i} className="border-b border-slate-50 last:border-none"><td className="py-3 font-black text-[#C23B22] text-base">{i+1}</td><td className="font-bold text-slate-400 italic text-base">Offline...</td><td className="text-right font-mono text-sm text-slate-300 opacity-60">0.0</td></tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                );
-            };
-
-            const ChatView = () => {
-                const [chatInput, setChatInput] = useState("");
-                const scrollRef = useRef();
-                const colors = ['text-blue-500', 'text-emerald-500', 'text-orange-500', 'text-purple-500', 'text-pink-500', 'text-yellow-600'];
-
-                const getUserColor = (name) => {
-                    let hash = 0;
-                    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-                    return colors[Math.abs(hash) % colors.length];
-                };
-
-                const scrollToBottom = () => {
-                    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                };
-
-                useEffect(() => { 
-                    const timer = setTimeout(scrollToBottom, 100); 
-                    return () => clearTimeout(timer);
-                }, [messages, activeView]);
-
-                const send = async () => { 
-                    if(!chatInput.trim() || !currentUser) return; 
-                    vibrate();
-                    await db.collection('chat').add({ 
-                        user: currentUser, 
-                        text: chatInput, 
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
-                        timeStr: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
-                    }); 
-                    setChatInput(""); 
-                };
-
-                return (
-                    <div className="flex flex-col h-[70vh] -mt-4 -mx-2 max-w-3xl mx-auto">
-                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar border-2 border-slate-200 rounded-[2rem] mx-2 mb-4 bg-slate-50/30 shadow-inner">
-                            {messages.map((m) => {
+                        <div className="flex-1 overflow-y-auto pr-2 space-y-4 no-scrollbar pb-4">
+                            {messages.map((m, idx) => {
                                 const isMe = m.user === currentUser;
+                                const showUser = idx === 0 || messages[idx-1].user !== m.user;
+                                const time = m.timestamp ? m.timestamp.toDate().toLocaleTimeString('de-DE', {hour: '2-digit', minute:'2-digit'}) : "...";
+                                
                                 return (
-                                    <div key={m.id} className={`flex flex-col animate-fadeIn ${isMe ? 'items-end' : 'items-start'}`}>
-                                        <div className={`max-w-[85%] p-4 shadow-sm ${isMe ? 'bg-[#C23B22] text-white msg-tail-right rounded-2xl' : 'bg-white text-[#1F293A] border border-slate-100 msg-tail-left rounded-2xl'}`}>
-                                            {!isMe && <p className={`text-xs font-black uppercase mb-1 tracking-wider ${getUserColor(m.user)}`}>{m.user}</p>}
-                                            <div className="flex flex-col">
-                                                <p className="text-base font-medium leading-tight pr-6">{m.text}</p>
-                                                <p className={`text-[10px] font-bold mt-2 self-end ${isMe ? 'text-red-200' : 'text-slate-400'}`}>
-                                                    {m.timeStr || '...'}
-                                                </p>
+                                    <div key={m.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'} animate-fadeIn`}>
+                                        <div className={`max-w-[85%] ${isMe ? 'items-end' : 'items-start'} flex flex-col`}>
+                                            {!isMe && showUser && <p className="text-[11px] font-black text-slate-500 ml-3 mb-1 uppercase tracking-wide">{m.user}</p>}
+                                            <div className={`px-4 py-2.5 rounded-2xl shadow-sm text-sm font-medium relative ${isMe ? 'bg-[#C23B22] text-white msg-tail-right' : 'bg-white text-slate-800 border msg-tail-left'}`}>
+                                                <p className="leading-relaxed">{m.text}</p>
+                                                <span className={`text-[9px] font-bold mt-1 block ${isMe ? 'text-red-100/80 text-right' : 'text-slate-400'}`}>{time}</span>
                                             </div>
                                         </div>
                                     </div>
                                 );
                             })}
+                            <div ref={bottomRef}></div>
                         </div>
-                        
-                        <div className="px-3 pb-2 pt-1 flex items-center gap-2">
-                            <div className="flex-1 bg-white rounded-full flex items-center px-4 py-1 shadow-md border border-slate-200">
-                                <input 
-                                    value={chatInput} 
-                                    onChange={e => setChatInput(e.target.value)} 
-                                    onKeyPress={e => e.key === 'Enter' && send()} 
-                                    type="text" 
-                                    placeholder="Garage Talk..." 
-                                    className="flex-1 py-3 outline-none text-base bg-transparent" 
-                                />
-                            </div>
-                            <button onClick={send} className="bg-[#1F293A] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform"><Icons.Send /></button>
+                        <div className="p-2 bg-white rounded-full shadow-lg border border-slate-100 flex gap-2 items-center sticky bottom-0 mt-2">
+                            <input value={newMsg} onChange={e => setNewMsg(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMsg()} placeholder={currentUser ? "Nachricht..." : "Profil wählen zum Chatten"} disabled={!currentUser} className="flex-1 bg-transparent p-3 pl-4 outline-none text-sm font-medium disabled:opacity-50"/>
+                            <button onClick={sendMsg} disabled={!currentUser || !newMsg.trim()} className="bg-[#C23B22] text-white p-3 rounded-full disabled:bg-slate-300 transition-all aspect-square flex items-center justify-center">
+                                <Icons.Send />
+                            </button>
                         </div>
                     </div>
                 );
             };
 
-            if (isLoading) return <div className="flex items-center justify-center min-h-screen bg-[#F1F5F9]"><div className="loader"></div></div>;
+            const BarView = () => (
+                <div className="space-y-6 animate-fadeIn">
+                    <div className="flex justify-between items-center px-1">
+                        <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Bier Vorrat</h2>
+                        <Icons.Bar />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        {beerStock.map(b => {
+                            const stockLimit = b.min || 5;
+                            const lowStock = b.stock <= stockLimit;
+                            return (
+                                <div key={b.id} className={`darts-card p-5 rounded-2xl ${lowStock ? 'border-l-amber-500 bg-amber-50' : ''}`}>
+                                    <p className="font-black text-lg text-[#1F293A] tracking-tight truncate">{b.name}</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">{b.type || 'Kaltgetränk'}</p>
+                                    <div className="flex items-end justify-between gap-2 border-t border-slate-100 pt-3">
+                                        <p className={`font-black text-5xl tracking-tighter ${lowStock ? 'text-amber-600' : 'text-[#C23B22]'}`}>{b.stock}</p>
+                                        <span className={`text-xs font-black uppercase px-2 py-1 rounded-md ${lowStock ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-slate-100 text-slate-600'}`}>Flaschen</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {beerStock.length === 0 && <div className="text-center py-10 darts-card rounded-2xl bg-slate-50 italic text-slate-400 text-sm border-dashed">Keine Daten verfügbar...</div>}
+                </div>
+            );
+
+            const RankView = () => {
+                const dummyRanks = [
+                    { name: 'Kev', points: 1250, av: 45.5, win: 12, icons: '🏆🔥' },
+                    { name: 'Dome', points: 1100, av: 42.1, win: 10, icons: '🎯' },
+                    { name: 'Malle', points: 950, av: 39.8, win: 8, icons: '' },
+                    { name: 'Meff', points: 800, av: 35.2, win: 5, icons: '🐢' }
+                ];
+
+                return (
+                    <div className="space-y-5 animate-fadeIn">
+                        <div className="flex justify-between items-center px-1">
+                            <h2 className="text-2xl font-black italic uppercase text-[#1F293A]">Darts Order of Merit</h2>
+                            <span className="text-4xl">🎯</span>
+                        </div>
+                        
+                        <div className="space-y-3">
+                            {dummyRanks.map((r, idx) => (
+                                <div key={r.name} className={`bg-white p-4 rounded-2xl border border-slate-100 flex items-center gap-4 relative shadow-sm ${idx === 0 ? 'border-l-4 border-l-amber-400' : idx === 1 ? 'border-l-4 border-l-slate-400' : idx === 2 ? 'border-l-4 border-l-orange-400' : ''}`}>
+                                    <div className={`font-black text-2xl w-10 text-center ${idx < 3 ? 'text-[#1F293A]' : 'text-slate-300'}`}>#{idx + 1}</div>
+                                    <div className="flex-1">
+                                        <p className="font-black text-base text-[#1F293A] flex items-center gap-2">{r.name} <span className="text-sm">{r.icons}</span></p>
+                                        <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">{r.points} Pkt. / Avg. {r.av}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-2xl font-black text-[#C23B22]">{r.win}</p>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase">Siege</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="darts-card p-5 rounded-2xl bg-[#1F293A] text-white border-none mt-6">
+                            <p className="font-bold text-xs uppercase text-amber-400 mb-1 tracking-widest">Letztes Turnier</p>
+                            <p className="font-black text-xl tracking-tight">Garage Masters 2023</p>
+                            <p className="text-sm mt-1 text-slate-300">Sieger: <span className="font-bold text-white">Kev</span> (Def. Dome 5:3)</p>
+                        </div>
+                    </div>
+                );
+            };
+
+            const NavItem = ({ view, icon, label }) => {
+                const active = activeView === view;
+                const Icon = Icons[icon];
+                return (
+                    <button onClick={() => { vibrate(); setActiveView(view); }} className={`flex flex-col items-center justify-center w-full h-full transition-all relative ${active ? 'text-[#C23B22]' : 'text-slate-400'}`}>
+                        {active && <span className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-1 bg-[#C23B22] rounded-b-full shadow-[0_2px_10px_rgba(194,59,34,0.5)]"></span>}
+                        <div className={`transition-transform ${active ? 'scale-110' : ''}`}><Icon /></div>
+                        <span className={`text-[10px] mt-1 font-black uppercase tracking-widest transition-opacity ${active ? 'opacity-100' : 'opacity-70'}`}>{label}</span>
+                    </button>
+                );
+            };
+
+            if (isLoading) return (
+                <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#F1F5F9] gap-4">
+                    <div className="loader"></div>
+                    <p className="font-black text-xs uppercase tracking-[0.3em] text-[#1F293A] animate-pulse">Garage69</p>
+                </div>
+            );
 
             return (
-                <div className="max-w-5xl mx-auto min-h-screen flex flex-col bg-[#F8FAFC] md:shadow-2xl md:border-x border-slate-200 pb-24 relative overflow-hidden">
-                    <header className="p-5 flex justify-between items-center border-b border-slate-200 sticky top-0 bg-white/95 backdrop-blur-md z-40">
-                        <div className="flex items-center gap-2"><span className="font-black italic text-2xl tracking-tighter text-[#1F293A]">G<span className="text-[#C23B22]">69</span></span><div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-red-500'}`}></div></div>
-                        <div className="flex items-center gap-4">
-                            <button onClick={async () => {
-                                vibrate();
-                                const newState = !notifsEnabled;
-                                setNotifsEnabled(newState);
-                                localStorage.setItem('g69_notifs', newState);
-                                if (newState && "Notification" in window) {
-                                    const permission = await Notification.requestPermission();
-                                    if (permission === "granted") new Notification("Garage69", { body: "Benachrichtigungen aktiv!", icon: LOGO_URL });
-                                }
-                            }} className="transition-all hover:scale-110"><Icons.Bell active={notifsEnabled} /></button>
-                            <span onDoubleClick={handleAdminLogin} className="text-[10px] bg-[#1F293A] text-white px-3 py-1 rounded-full font-black uppercase tracking-widest cursor-pointer select-none">{version}</span>
+                <div className="flex flex-col h-screen pb-[80px]">
+                    <header className="sticky top-0 z-50 bg-[#F1F5F9] px-4 pt-3 pb-3 border-b border-slate-200/50 flex justify-between items-center" style={{paddingTop: 'calc(0.75rem + env(safe-area-inset-top))'}}>
+                        <div className="flex items-center gap-1" onClick={handleAdminLogin}>
+                            <span className="p-2 mr-1 text-2xl font-black text-black bg-white rounded-full shadow-inner border border-slate-200">G</span>
+                            <span className="text-2xl font-bold text-red-600">69</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-100">{version}</span>
+                            <button onClick={() => { vibrate(); const n = !notifsEnabled; setNotifsEnabled(n); localStorage.setItem('g69_notifs', n); alert(n ? "Push-Notifikationen aktiviert (Simulation)" : "Notifikationen deaktiviert"); }} className="p-2.5 rounded-full bg-white border border-slate-100 shadow-sm">
+                                <Icons.Bell active={notifsEnabled} />
+                            </button>
                         </div>
                     </header>
-                    <main className="flex-1 p-4 md:p-8 overflow-y-auto no-scrollbar pb-10">
-                        {activeView === 'home' && <Dashboard />}
-                        {activeView === 'admin' && <AdminView />}
-                        {activeView === 'beer' && <BeerView />}
-                        {activeView === 'chat' && <ChatView />}
-                        {activeView === 'dates' && <DatesView />}
-                        {activeView === 'stats' && <StatsView />}
+
+                    <main className="flex-1 overflow-y-auto p-4 md:p-6 no-scrollbar">
+                        <div className="max-w-7xl mx-auto">
+                            {activeView === 'home' && <Dashboard />}
+                            {activeView === 'plan' && <PlanView />}
+                            {activeView === 'talk' && <TalkView />}
+                            {activeView === 'bar' && <BarView />}
+                            {activeView === 'rank' && <RankView />}
+                            {activeView === 'admin' && isAdmin && <AdminView />}
+                        </div>
                     </main>
-                    <nav className="fixed bottom-0 left-0 right-0 py-4 flex justify-around max-w-5xl mx-auto z-40 shadow-lg rounded-t-[2.5rem]">
-                        {[
-                            {id: 'home', icon: Icons.Home, label: 'HOME'}, {id: 'dates', icon: Icons.Plan, label: 'TERMINE'}, 
-                            {id: 'chat', icon: Icons.Talk, label: 'CHAT'}, {id: 'beer', icon: Icons.Bar, label: 'BAR'}, 
-                            {id: 'stats', icon: Icons.Rank, label: 'RANKING'},
-                            ...(isAdmin ? [{id: 'admin', icon: Icons.Admin, label: 'ADMIN'}] : [])
-                        ].map(item => (
-                            <button key={item.id} onClick={() => {vibrate(); setActiveView(item.id);}} className={`flex flex-col items-center flex-1 transition-all duration-300 ${activeView === item.id ? 'text-[#C23B22] -translate-y-1' : 'text-slate-400'}`}>
-                                <item.icon /><span className={`text-[10px] font-black mt-1 tracking-widest ${activeView === item.id ? 'opacity-100' : 'opacity-40'}`}>{item.label}</span>
-                                {activeView === item.id && <div className="w-1.5 h-1.5 bg-[#C23B22] rounded-full mt-1 animate-pulse"></div>}
-                            </button>
-                        ))}
+
+                    <nav className="fixed bottom-0 left-0 right-0 h-[75px] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-50 rounded-t-3xl" style={{paddingBottom: 'env(safe-area-inset-bottom)'}}>
+                        <div className="grid grid-cols-5 h-full max-w-lg mx-auto px-2">
+                            <NavItem view="home" icon="Home" label="Home" />
+                            <NavItem view="plan" icon="Plan" label="Plan" />
+                            <NavItem view="talk" icon="Talk" label="Talk" />
+                            <NavItem view="bar" icon="Bar" label="Bar" />
+                            <NavItem view="rank" icon="Rank" label="Rank" />
+                        </div>
                     </nav>
                 </div>
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
         root.render(<App />);
     </script>
 </body>
